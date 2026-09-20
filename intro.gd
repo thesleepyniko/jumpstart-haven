@@ -2,7 +2,7 @@ extends Node
 
 @onready var player_node = get_node("./Player")
 @onready var tile_map_node = get_node("./TileMapLayer")
-@onready var command_label = get_node("./Label")
+@onready var command_label = get_node("./Label") # this technically also doubles as the death message
 @onready var camera = get_node("./Player/Camera2D")
 @onready var title_label = get_node("./Player/Camera2D/Label2")
 
@@ -11,7 +11,7 @@ extends Node
 func _ready() -> void:
 	player_node.hide()
 	tile_map_node.hide()
-	camera.show() # make sure our camera shows so that some elements can remain visible
+	camera.hide() # keep the UI elements hidden until later
 		
 	var random_float = randf_range(0.2, 0.5) 
 	await get_tree().create_timer(random_float).timeout
@@ -46,17 +46,19 @@ func _ready() -> void:
 	await get_tree().create_timer(2.0).timeout
 	
 	
-	
-	
-	
-	command_label.hide()
+	#command_label.hide()
 	player_node.show()
 	tile_map_node.show()
 	
 	title_label.text = " llmbenchmark start --platformer ./runnerAI"
 
+	#camera.show()
+
+	var tween = create_tween()
+	tween.tween_property(camera, "position", player_node.global_position, 1.5)
 	
-	
+	camera.show()
+	#tween.kill()
 #	
 	
 #	var random_float = randf_range(0.5, 5.5) 
