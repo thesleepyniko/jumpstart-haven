@@ -3,11 +3,12 @@ extends CharacterBody2D
 
 const SPEED = 900.0
 const JUMP_VELOCITY = -600.0
+var allow_movement = false
 
 
 func _physics_process(delta: float) -> void:
-	# prevent the player from falling while it's hidden for the intro
-	if is_visible_in_tree():
+	# exists to prevent user from moving during animations, even if the user is visible
+	if allow_movement:
 		# Add the gravity.
 		if not is_on_floor():
 			velocity += get_gravity() * delta
@@ -25,3 +26,7 @@ func _physics_process(delta: float) -> void:
 			velocity.x = move_toward(velocity.x, 0, SPEED)
 
 		move_and_slide()
+
+
+func _on_node_ready_for_game() -> void:
+	allow_movement = true
