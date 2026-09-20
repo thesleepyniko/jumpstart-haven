@@ -7,32 +7,34 @@ extends Node
 @onready var title_label = get_node("./Player/Camera2D/TermCameraLabel")
 @onready var jump_pad_node = get_node("./Area2DJumpPad")
 
+var time_elapsed = 0
+var ready_for_time = false
+
 var original_position: Vector2
 var jump_trigger_able = true
+var collected_data = 0
+var monitor_for_restart = false
+var pulse_tween: Tween
 
 signal ready_for_movement
 signal stop_movement
+signal stop_all_movement
 
-func typewriter_on_node(node: Label, text: String):
-	for letter in text:
-		node.text += letter
-		await get_tree().create_timer(0.1).timeout	
-	node.text+="\n"
-	
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
+func restart_scene() -> void:
 	stop_movement.emit()
 	player_node.hide()
 	tile_map_node.hide()
 	camera_node.modulate.a = 0
 	jump_pad_node.hide()
+	player_node.global_position = Vector2i(0, 0)
+
 	
 	#camera_node.hide() # keep the UI elements hidden until later
 		
 	var random_float = randf_range(0.2, 0.5) 
 	await get_tree().create_timer(random_float).timeout
 	
-	command_label.text += "\n[INFO] Loading model from ./jumpstartAI\n"
+	command_label.text += "\n[INFO] Loading model from ./runnerAI\n"
 	
 	random_float = randf_range(0.1, 0.2) 
 	await get_tree().create_timer(random_float).timeout
@@ -92,12 +94,18 @@ func _ready() -> void:
 	
 	title_label.text = ""
 	
-	typewriter_on_node(title_label, "Objective: Break out")
+	camera_node.show()
+	
+	await typewriter_on_node(title_label, "Objective: Collect data and reach the end | 0/3")
 	
 	ready_for_movement.emit()
-
-		
-	var pulse_tween = create_tween().set_loops()
+	
+	ready_for_time = true
+	
+	camera_node.top_level = false
+	camera_node.global_position = player_node.global_position
+	
+	pulse_tween = create_tween().set_loops()
 	
 	pulse_tween.tween_property(title_label, "modulate:a", 0.6, 2)\
 		.set_trans(Tween.TRANS_SINE)\
@@ -106,11 +114,44 @@ func _ready() -> void:
 	pulse_tween.tween_property(title_label, "modulate:a", 1.0, 2)\
 		.set_trans(Tween.TRANS_SINE)\
 		.set_ease(Tween.EASE_IN_OUT)
+		
+		
+
+func typewriter_on_node(node: Label, text: String):
+	for letter in text:
+		node.text += letter
+		await get_tree().create_timer(0.1).timeout	
+	node.text+="\n"
+	
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	restart_scene()
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	pass
+	if ready_for_time:
+		time_elapsed += delta
+	if monitor_for_restart:
+		if Input.is_action_just_pressed("jump"):
+			ready_for_time = false
+			time_elapsed = 0
+			command_label.text = "bash-5.3$  llmbenchmark start --platformer ./runnerAI"
+			monitor_for_restart = false
+			collected_data = 0
+			pulse_tween.kill()
+			jump_pad_node.set_deferred("monitoring", false)
+			
+			restart_scene()
+			
+			
 
+
+func format_time(seconds: float) -> String:
+	var hours = int(seconds) / (60*60) # just in case
+	var minutes = int(seconds) / 60
+	var secs = int(seconds) % 60
+	var msec = int((seconds - int(seconds)) * 100)
+	return "%02d:%02d:%02d.%02d" % [hours, minutes, secs, msec]
 
 func _on_area_2d_void_respawn_triggered() -> void:
 	var respawn_label = get_node("RespawnLabel")
@@ -155,7 +196,48 @@ func _on_area_2d_jump_trigger_body_entered(body: Node2D) -> void:
 		camera_node.zoom = Vector2(1, 1)
 		
 		jump_pad_node.set_deferred("monitoring", true)
-
 		
 		ready_for_movement.emit()
 			
+
+
+
+
+func _on_area_2d_data_1_data_collected() -> void:
+	collected_data += 1
+	title_label.text = "Objective: Collect data and reach the end | %d/3" % collected_data
+
+
+func _on_area_2d_data_2_data_collected() -> void:
+	collected_data += 1
+	title_label.text = "Objective: Collect data and reach the end | %d/3" % collected_data
+
+func _on_area_2d_data_3_data_collected() -> void:
+	collected_data += 1
+	title_label.text = "Objective: Collect data and reach the end | %d/3" % collected_data
+
+
+func _on_area_2d_end_body_entered(body: Node2D) -> void:
+	if body.name == "Player":
+		ready_for_time = false
+		stop_all_movement.emit()
+		stop_movement.emit()
+		camera_node.hide()
+		player_node.hide()
+		
+		var camera_world_pos = camera_node.global_position   # read while still parented
+		camera_node.top_level = true
+		camera_node.global_position = camera_world_pos
+		
+		var end_tween = create_tween()
+		
+		end_tween.tween_property(camera_node, "global_position", Vector2(-92+(1277/2), -1980+(721/2)), 2)
+		
+		await end_tween.finished
+		
+		await typewriter_on_node(command_label, "[INFO]: Model beat the game in %ss\n" % format_time(time_elapsed))
+		await typewriter_on_node(command_label, "[INFO]: Press space to try again.\n")
+		
+		monitor_for_restart = true
+		jump_trigger_able = true
+			#end_tween.parallel().tween_property(camera_node, "zoom", Vector2(1.5, 1.5), 2)
