@@ -217,7 +217,6 @@ position = Vector2(2868.4998, -1662)
 shape = SubResource("RectangleShape2D_f13xn")
 
 [node name="TextureRect3" type="TextureRect" parent="." unique_id=394523825 groups=["terminal_initial"]]
-visible = false
 z_index = 999
 offset_left = 1107.0
 offset_top = -1997.0
@@ -226,7 +225,6 @@ offset_bottom = -1933.0
 texture = SubResource("GradientTexture2D_qn3nj")
 
 [node name="TextureRect2" type="TextureRect" parent="." unique_id=1899601593 groups=["terminal_initial"]]
-visible = false
 z_index = 999
 offset_left = 1083.0
 offset_top = -1997.0
@@ -245,7 +243,6 @@ label_settings = SubResource("LabelSettings_e2u21")
 autowrap_mode = 3
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=511233412 groups=["terminal_initial"]]
-visible = false
 z_index = 999
 offset_left = 1130.0
 offset_top = -1997.0
@@ -254,7 +251,6 @@ offset_bottom = -1933.0
 texture = SubResource("GradientTexture2D_bss38")
 
 [node name="TermInputLabel" type="Label" parent="." unique_id=1757057884 groups=["terminal_initial"]]
-visible = false
 offset_left = -82.0
 offset_top = -1944.0
 offset_right = 1044.0
@@ -264,7 +260,6 @@ label_settings = SubResource("LabelSettings_e2u21")
 autowrap_mode = 3
 
 [node name="Panel" type="Panel" parent="." unique_id=1182254116 groups=["terminal_initial"]]
-visible = false
 offset_left = -94.0
 offset_top = -1980.0
 offset_right = 1186.0
