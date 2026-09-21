@@ -380,6 +380,9 @@ texture = ExtResource("11_wt6go")
 position = Vector2(1401, -1522)
 shape = SubResource("RectangleShape2D_histl")
 
+[connection signal="data_restarting" from="." to="Area2DData1" method="_on_node_data_restarting"]
+[connection signal="data_restarting" from="." to="Area2DData2" method="_on_node_data_restarting"]
+[connection signal="data_restarting" from="." to="Area2DData3" method="_on_node_data_restarting"]
 [connection signal="ready_for_movement" from="." to="Area2DJumpTrigger" method="_on_node_ready_for_movement"]
 [connection signal="ready_for_movement" from="." to="Player" method="_on_node_ready_for_movement"]
 [connection signal="stop_all_movement" from="." to="Player" method="_on_node_stop_all_movement"]

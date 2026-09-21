@@ -19,6 +19,7 @@ var pulse_tween: Tween
 signal ready_for_movement
 signal stop_movement
 signal stop_all_movement
+signal data_restarting # only useful for the data since they need to respawn themselves
 
 func restart_scene() -> void:
 	stop_movement.emit()
@@ -135,10 +136,13 @@ func _process(delta: float) -> void:
 			ready_for_time = false
 			time_elapsed = 0
 			command_label.text = "bash-5.3$  llmbenchmark start --platformer ./runnerAI"
+			get_node("JumpLabel").text = ""
 			monitor_for_restart = false
 			collected_data = 0
 			pulse_tween.kill()
 			jump_pad_node.set_deferred("monitoring", false)
+			
+			data_restarting.emit()
 			
 			restart_scene()
 			
@@ -163,9 +167,6 @@ func _on_area_2d_void_respawn_triggered() -> void:
 
 func _on_area_2d_jump_trigger_body_entered(body: Node2D) -> void:
 	if not jump_trigger_able:
-		return
-		
-	if collected_data < 3:
 		return
 
 	if body.name == "Player":
@@ -221,6 +222,9 @@ func _on_area_2d_data_3_data_collected() -> void:
 
 
 func _on_area_2d_end_body_entered(body: Node2D) -> void:
+	if collected_data < 3:
+		return
+		
 	if body.name == "Player":
 		ready_for_time = false
 		stop_all_movement.emit()

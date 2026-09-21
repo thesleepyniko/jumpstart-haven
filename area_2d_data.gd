@@ -27,3 +27,8 @@ func _on_body_entered(body: Node2D) -> void:
 		self.hide()
 		self.set_deferred("monitoring", false)
 		data_collected.emit()
+
+
+func _on_node_data_restarting() -> void:
+	self.show()
+	self.set_deferred("monitoring", true)
