@@ -25,6 +25,9 @@ func restart_scene() -> void:
 	player_node.hide()
 	tile_map_node.hide()
 	camera_node.modulate.a = 0
+	camera_node.show()
+	title_label.text = ""
+
 	jump_pad_node.hide()
 	player_node.global_position = Vector2i(0, 0)
 
@@ -66,8 +69,6 @@ func restart_scene() -> void:
 	
 	#command_label.hide()
 	
-	#title_label.text = " llmbenchmark start --platformer ./runnerAI"
-
 	#camera.show()
 	
 	var tween_one = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_QUINT)
@@ -91,9 +92,7 @@ func restart_scene() -> void:
 	tween_two.kill()
 	
 	command_label.text += "[INFO] Running...\n"
-	
-	title_label.text = ""
-	
+		
 	camera_node.show()
 	
 	await typewriter_on_node(title_label, "Objective: Collect data and reach the end | 0/3")
@@ -235,8 +234,8 @@ func _on_area_2d_end_body_entered(body: Node2D) -> void:
 		
 		await end_tween.finished
 		
-		await typewriter_on_node(command_label, "[INFO]: Model beat the game in %ss\n" % format_time(time_elapsed))
-		await typewriter_on_node(command_label, "[INFO]: Press space to try again.\n")
+		await typewriter_on_node(command_label, "[INFO] Model beat the game in %s" % format_time(time_elapsed))
+		await typewriter_on_node(command_label, "[INFO] Press space to try again.")
 		
 		monitor_for_restart = true
 		jump_trigger_able = true

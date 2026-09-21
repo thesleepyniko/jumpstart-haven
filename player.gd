@@ -6,6 +6,8 @@ const JUMP_VELOCITY = -600.0
 var allow_movement = false
 var stop_all_movement = false
 
+@onready var sprite_node = get_node("Sprite2D")
+
 
 func _physics_process(delta: float) -> void:
 	# for end screen so player can't just go flying
@@ -29,7 +31,11 @@ func _physics_process(delta: float) -> void:
 				velocity.x = direction * SPEED
 			else:
 				velocity.x = move_toward(velocity.x, 0, SPEED)
-
+		if velocity.x > 0:
+			sprite_node.flip_h = true
+		elif velocity.x < 0:
+			sprite_node.flip_h = false
+			
 		move_and_slide()
 
 

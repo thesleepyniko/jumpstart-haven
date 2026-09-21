@@ -2,12 +2,12 @@
 
 [ext_resource type="Script" uid="uid://80kl10p8d3vr" path="res://player.gd" id="1_112p8"]
 [ext_resource type="Script" uid="uid://d04ov1pfw8wy0" path="res://intro.gd" id="1_e2u21"]
-[ext_resource type="Texture2D" uid="uid://4q335xxs2p" path="res://icon.svg" id="1_j2q8x"]
 [ext_resource type="Script" uid="uid://bi2mav5pj4t3h" path="res://area_2d_void.gd" id="2_l6pdb"]
 [ext_resource type="Texture2D" uid="uid://js1ltgxcfxm8" path="res://Rectangle 3.png" id="2_qn3nj"]
 [ext_resource type="Script" uid="uid://11743p3i47pb" path="res://area_2d_jump_trigger.gd" id="3_r657h"]
 [ext_resource type="StyleBox" uid="uid://d0cyw7bs0p3xg" path="res://window_outline.tres" id="3_tda05"]
 [ext_resource type="FontFile" uid="uid://cqqdvaf55gjvu" path="res://JetBrainsMono-2.304/fonts/webfonts/JetBrainsMono-SemiBold.woff2" id="5_bss38"]
+[ext_resource type="Texture2D" uid="uid://bm0c2q4o3agwv" path="res://orpheus.png" id="8_jfkdj"]
 [ext_resource type="Texture2D" uid="uid://8drrgqdn1rrx" path="res://101010101 101010101 101010101 101010101.png" id="9_r657h"]
 [ext_resource type="Script" uid="uid://dhnu7gggyd7p7" path="res://area_2d_data.gd" id="10_jfkdj"]
 [ext_resource type="Texture2D" uid="uid://b4r5fi545d66i" path="res://at-icons--file-document (1).png" id="11_wt6go"]
@@ -255,7 +255,7 @@ offset_left = -82.0
 offset_top = -1944.0
 offset_right = 1044.0
 offset_bottom = -1901.0
-text = "bash-5.3$  llmbenchmark start --platformer ./runnerAI"
+text = "bash-5.3$  platformerllmbench start ./runnerAI"
 label_settings = SubResource("LabelSettings_e2u21")
 autowrap_mode = 3
 
@@ -270,7 +270,7 @@ theme_override_styles/panel = ExtResource("3_tda05")
 script = ExtResource("1_112p8")
 
 [node name="Sprite2D" type="Sprite2D" parent="Player" unique_id=682598432]
-texture = ExtResource("1_j2q8x")
+texture = ExtResource("8_jfkdj")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player" unique_id=2093891762]
 position = Vector2(0, 0.5)
@@ -380,11 +380,11 @@ texture = ExtResource("11_wt6go")
 position = Vector2(1401, -1522)
 shape = SubResource("RectangleShape2D_histl")
 
-[connection signal="ready_for_movement" from="." to="Player" method="_on_node_ready_for_movement"]
 [connection signal="ready_for_movement" from="." to="Area2DJumpTrigger" method="_on_node_ready_for_movement"]
+[connection signal="ready_for_movement" from="." to="Player" method="_on_node_ready_for_movement"]
 [connection signal="stop_all_movement" from="." to="Player" method="_on_node_stop_all_movement"]
-[connection signal="stop_movement" from="." to="Player" method="_on_node_stop_movement"]
 [connection signal="stop_movement" from="." to="Area2DJumpTrigger" method="_on_node_stop_movement"]
+[connection signal="stop_movement" from="." to="Player" method="_on_node_stop_movement"]
 [connection signal="body_entered" from="Area2DEnd" to="." method="_on_area_2d_end_body_entered"]
 [connection signal="body_entered" from="Area2DVoid" to="Area2DVoid" method="_on_body_entered"]
 [connection signal="respawn_triggered" from="Area2DVoid" to="." method="_on_area_2d_void_respawn_triggered"]
