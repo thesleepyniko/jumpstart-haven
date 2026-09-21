@@ -164,6 +164,10 @@ func _on_area_2d_void_respawn_triggered() -> void:
 func _on_area_2d_jump_trigger_body_entered(body: Node2D) -> void:
 	if not jump_trigger_able:
 		return
+		
+	if collected_data < 3:
+		return
+
 	if body.name == "Player":
 
 		jump_trigger_able = false
