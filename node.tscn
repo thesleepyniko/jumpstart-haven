@@ -326,10 +326,10 @@ tile_set = SubResource("TileSet_3l8r3")
 
 [node name="Background2D" type="ColorRect" parent="." unique_id=778642508]
 z_index = -999
-offset_left = -18304.0
-offset_top = -13397.0
-offset_right = 34735.0
-offset_bottom = 5408.0
+offset_left = -19130.0
+offset_top = -13676.0
+offset_right = 33909.0
+offset_bottom = 5129.0
 color = Color(0.09411765, 0.09803922, 0.14901961, 1)
 
 [node name="JumpLabel" type="Label" parent="." unique_id=1215861923]
